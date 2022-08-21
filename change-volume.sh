@@ -47,6 +47,7 @@ HELP
 	shift
 done
 
+# First unmute, then change volume, take modification in argument
 modif_volume() {
 	if [ $# -eq 0 ]; then return 255; fi
 	pactl set-sink-mute @DEFAULT_SINK@ false
