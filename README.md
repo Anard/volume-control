@@ -6,7 +6,7 @@ change-volume OPTION [OPTION]
 
 First unmute and change volume output
 
-OPTIONS
+## OPTIONS
 
   -h|--help : print help and exit
   
