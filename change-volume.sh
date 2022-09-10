@@ -1,5 +1,6 @@
 #!/bin/bash
 STEP=5; unset FORCE modif
+SOUND="/usr/share/sounds/freedesktop/stereo/audio-volume-change.oga"
 if [ $# -eq 0 ]; then echo "Missing argument, type change-volume --help for more information" && exit 255; fi
 exit_wrong_param() {
 	echo "Modification have ever been set, exiting" && exit 2
@@ -52,10 +53,12 @@ modif_volume() {
 	if [ $# -eq 0 ]; then return 255; fi
 	pactl set-sink-mute @DEFAULT_SINK@ false
 	pactl set-sink-volume @DEFAULT_SINK@ $1
+	pactl play-sample volume
 	return 0
 }
 cur_volume=$( pactl get-sink-volume @DEFAULT_SINK@ | awk '{print $5}' )
 cur_volume=${cur_volume%?}
+pactl upload-sample "${SOUND}" volume
 case $modif in
 	+*)
 		let max=( 100-$STEP )
@@ -70,5 +73,6 @@ case $modif in
 		[ $cur_volume -lt $STEP ] && modif_volume 0% || modif_volume $modif
 		;;
 esac
-unset cur_volume FORCE STEP
+pactl remove-sample volume
+unset cur_volume FORCE STEP SOUND
 exit 0
